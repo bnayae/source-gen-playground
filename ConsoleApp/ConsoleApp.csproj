@@ -9,6 +9,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="ClassR.xml" />
+    <None Remove="ClassZ.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="ClassR.xml" />
+    <AdditionalFiles Include="ClassZ.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\SourceGenerator\SourceGenerator.csproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
   </ItemGroup>
 

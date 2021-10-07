@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
+
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+
 using SourceGenerator;
+using SourceGenerator.FromContent;
 
 namespace TestConsoleApp
 {
@@ -13,18 +16,7 @@ namespace TestConsoleApp
     {
         static void Main(string[] args)
         {
-            string source = @"
-namespace Foo
-{
-    class C
-    {
-        void M()
-        {
-        }
-    }
-}";
-
-            var (diagnostics, output) = GetGeneratedOutput(source);
+            var (diagnostics, output) = GetGeneratedOutput();
 
             if (diagnostics.Length > 0)
             {
@@ -40,10 +32,8 @@ namespace Foo
             Console.WriteLine(output);
         }
 
-        private static (ImmutableArray<Diagnostic>, string) GetGeneratedOutput(string source)
+        private static (ImmutableArray<Diagnostic>, string) GetGeneratedOutput()
         {
-            var syntaxTree = CSharpSyntaxTree.ParseText(source);
-
             var references = new List<MetadataReference>();
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
             foreach (var assembly in assemblies)
@@ -54,18 +44,8 @@ namespace Foo
                 }
             }
 
-            var compilation = CSharpCompilation.Create("foo", new SyntaxTree[] { syntaxTree }, references, new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
-
-            // TODO: Uncomment these lines if you want to return immediately if the injected program isn't valid _before_ running generators
-            //
-            // ImmutableArray<Diagnostic> compilationDiagnostics = compilation.GetDiagnostics();
-            //
-            // if (diagnostics.Any())
-            // {
-            //     return (diagnostics, "");
-            // }
-
-            ISourceGenerator generator = new FooGenerator();
+            var compilation = CSharpCompilation.Create(null);
+            ISourceGenerator generator = new XmlGenerator();
 
             var driver = CSharpGeneratorDriver.Create(generator);
             driver.RunGeneratorsAndUpdateCompilation(compilation, out var outputCompilation, out var generateDiagnostics);

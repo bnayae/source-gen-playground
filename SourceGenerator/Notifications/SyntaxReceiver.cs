@@ -12,28 +12,36 @@ namespace SourceGenerator
 
         public void OnVisitSyntaxNode(SyntaxNode syntaxNode)
         {
-        //    if (syntaxNode is InvocationExpressionSyntax
-        //        {
-        //            ArgumentList:
-        //            {
-        //                Arguments:
-        //                {
-        //                    Count: <= 2
-        //                } arguments
-        //            }, Expression: MemberAccessExpressionSyntax
-        //            {
-        //                Name:
-        //                {
-        //                    Identifier:
-        //                    {
-        //                        ValueText: "Validate"
-        //                    }
-        //                }
-        //            }
-        //        })
-        //    {
-        //        Items = Items.AddRange(arguments.Select(m => m.NameColon?.ColonToken.ValueText));
-        //    }
+            if (syntaxNode is ClassDeclarationSyntax
+                {
+                    AttributeLists:
+                    {
+                    }
+                })
+            {
+            }
+            //    if (syntaxNode is InvocationExpressionSyntax
+            //        {
+            //            ArgumentList:
+            //            {
+            //                Arguments:
+            //                {
+            //                    Count: <= 2
+            //                } arguments
+            //            }, Expression: MemberAccessExpressionSyntax
+            //            {
+            //                Name:
+            //                {
+            //                    Identifier:
+            //                    {
+            //                        ValueText: "Validate"
+            //                    }
+            //                }
+            //            }
+            //        })
+            //    {
+            //        Items = Items.AddRange(arguments.Select(m => m.NameColon?.ColonToken.ValueText));
+            //    }
         }
     }
 }
