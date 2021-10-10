@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleApp
+namespace TestConsoleApp
 {
     [AttributeUsage(AttributeTargets.Interface)]
     public class EventSourceProducer : Attribute { }
@@ -13,6 +13,5 @@ namespace ConsoleApp
     public interface ISample
     {
         ValueTask<string[]> StartAsync(int id, string name);
-        ValueTask<string[]> EndAsync(string key, DateTime date);
     }
 }

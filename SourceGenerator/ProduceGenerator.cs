@@ -16,7 +16,8 @@ namespace SourceGenerator
 
         public void Execute(GeneratorExecutionContext context)
         {
-            var interfaces = context.Compilation.SyntaxTrees.SelectMany(x => x.GetRoot()
+            var interfaces = context.Compilation.SyntaxTrees.SelectMany(x => 
+                x.GetRoot()
                 .DescendantNodes()
                 .Where(x => x is TypeDeclarationSyntax tds &&
                     tds.Kind() == SyntaxKind.InterfaceDeclaration &&
@@ -46,7 +47,9 @@ namespace SourceGenerator
             }
 
             {
-                var source = $"public class EmptyGenerated {{ }}";
+                var source = @$"public class EmptyGenerated {{ 
+    // {interfaces.Count()}
+}}";
 
                 if (source != null)
                 {

@@ -45,7 +45,9 @@ namespace TestConsoleApp
             }
 
             var compilation = CSharpCompilation.Create(null);
-            ISourceGenerator generator = new XmlGenerator();
+
+            //ISourceGenerator generator = new XmlGenerator();
+            ISourceGenerator generator = new ProduceGenerator();
 
             var driver = CSharpGeneratorDriver.Create(generator);
             driver.RunGeneratorsAndUpdateCompilation(compilation, out var outputCompilation, out var generateDiagnostics);

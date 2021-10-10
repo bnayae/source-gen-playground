@@ -1,4 +1,8 @@
 ﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+
+using System.Linq;
+using System.Text;
 
 namespace SourceGenerator
 {
@@ -7,18 +11,36 @@ namespace SourceGenerator
     {
         public void Initialize(GeneratorInitializationContext context)
         {
-            context.RegisterForSyntaxNotifications(() => new SyntaxReceiver());
+            context.RegisterForSyntaxNotifications(() => new SampleSyntaxReceiver());
         }
 
         public void Execute(GeneratorExecutionContext context)
         {
-            if (context.SyntaxReceiver is not SyntaxReceiver) return;
+            if (context.SyntaxReceiver is not SampleSyntaxReceiver syntax) return;
 
-            var source = "class Bar { }";
-
-            if (source != null)
+            foreach (var item in syntax.Items)
             {
-                context.AddSource("generated.cs", source);
+                var source = new StringBuilder();
+                source.AppendLine($"[ System.CodeDom.Compiler.GeneratedCode(\"{nameof(GeneratorWithNotifications)}\")]");
+                source.AppendLine($"public class {item.Identifier.ValueText}Gen {{ ");
+
+                foreach (var method in item.Members)
+                {
+                    if (method is MethodDeclarationSyntax mds)
+                    {
+                        source.AppendLine($"public void {mds.Identifier.ValueText}(");
+
+                        var ps = mds.ParameterList.Parameters.Select(p => $"{p.Type} {p.Identifier.ValueText}");
+                        source.AppendLine(string.Join(", ", ps));
+                        source.Append(") { }");
+                    }
+                }
+                source.AppendLine("}");
+                if (source != null)
+                {
+                    context.AddSource($"{item.Identifier.ValueText}.cs", source.ToString());
+                }
+
             }
         }
     }
